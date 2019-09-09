@@ -1,127 +1,144 @@
 import * as mysql from 'promise-mysql';
 import { DB_HOST, DB_TABLE, DB_USER, DB_PASSWORD, DB_NAME } from './config';
+import * as _ from 'lodash';
+import { DBError } from './error';
+import { Event, Visit } from 'common';
 
 let connection: mysql.Connection;
 
 export interface FilterOptions {
-	care_recipient_id?: string,
-	caregiver_id?: string,
-	visit_id?: string,
-	alert_id?: string,
-	timeFrom?: string,
-	timeTo?: string,
+  care_recipient_id?: string,
+  caregiver_id?: string,
+  visit_id?: string,
+  alert_id?: string,
+  timeFrom?: string,
+  timeTo?: string,
+  event_type?: string
 }
 
 function combineConditions(conditions: string[]) {
 	if (conditions.length === 0) {
-		return "";
+		return '';
 	} else {
-		return "WHERE " + conditions[0] + conditions.slice(1).map(condition => ` AND ${condition}`).reduce((a, b) => a + b, "");
+		return 'WHERE ' + conditions[0] + conditions.slice(1).map(condition => ` AND ${condition}`).reduce((a, b) => a + b, '') + ' ';
 	}
 }
 
 function addFilters(options: FilterOptions): string {
 	const conditions: string[] = [];
 	if (options.care_recipient_id) {
-		conditions.push(`(care_recipient_id = '${options.care_recipient_id}')`);
+		conditions.push(mysql.format('(care_recipient_id = ?)', [options.care_recipient_id]));
 	}
 	if (options.caregiver_id) {
-		conditions.push(`(caregiver_id = '${options.caregiver_id}')`);
+    conditions.push(mysql.format('(caregiver_id = ?)', [options.caregiver_id]));
 	}
 	if (options.visit_id) {
-		conditions.push(`(visit_id = '${options.visit_id}')`);
+		conditions.push(mysql.format('(visit_id = ?)', [options.visit_id]));
 	}
 	if (options.alert_id) {
-		conditions.push(`(alert_id = '${options.alert_id}')`);
+		conditions.push(mysql.format('(alert_id = ?)', [options.alert_id]));
 	}
 	if (options.timeFrom) {
-		conditions.push(`(timestamp >= '${options.timeFrom}')`);
+		conditions.push(mysql.format('(timestamp >= ?)', [options.timeFrom]));
 	}
 	if (options.timeTo) {
-    conditions.push(`(timestamp <= '${options.timeTo}')`);
+    conditions.push(mysql.format('(timestamp <= ?)', [options.timeTo]));
   }
+  if (options.event_type) {
+    conditions.push(mysql.format('(event_type = ?)', [options.event_type]));
+  }
+  
+  conditions.push(`(visit_id IS NOT NULL)`);
+  
   return combineConditions(conditions)
 }
 
-function buildQuery(filterOptions?: FilterOptions): string {
+function buildQuery(filterOptions?: FilterOptions, order: string = 'DESC'): string {
 	let query: string = `
-SELECT caregiver_id, care_recipient_id, id, payload_as_text, timestamp, event_type, alert_id 
-FROM ${DB_TABLE}
-`;
-	if (filterOptions) {
-		query += addFilters(filterOptions)
-	}
-	console.log(query);
-	return query;
+  SELECT caregiver_id, visit_id, care_recipient_id, id, payload_as_text, timestamp, event_type, alert_id 
+  FROM ${DB_TABLE} 
+  `;
+  if (filterOptions) {
+    query += addFilters(filterOptions)
+  }
+  if (order) {
+    query += `
+  ORDER BY timestamp ${order}; 
+  `
+  }
+  console.log(query);
+  return query;
 }
 
-export interface Event {
-	id: string;
-	timestamp: string;
-	payload: string;
-	event_type: string;
-};
-
-function parseEventData(dbRows: any[]): Event {
-	if (!(dbRows.length > 0)) {
-		throw new Error('no event found')
-	}
+function parseEventData(dbRow: any): Event {
 	return {
-		id: dbRows[0].id,
-		timestamp: dbRows[0].timestamp,
-		event_type: dbRows[0].event_type,
-		payload: JSON.parse(dbRows[0].payload_as_text)
+		id: dbRow.id,
+		timestamp: dbRow.timestamp,
+		event_type: dbRow.event_type,
+		payload: JSON.parse(dbRow.payload_as_text)
 	}
-}
-
-export interface Visit {
-	caregiver_id: string;
-	care_recipient_id: string;
-	events: Event[]
-}
-
-function parseVisitData(dbRows: any[]): Visit {
-	if (!(dbRows.length > 0)) {
-		throw new Error('no visit data found')
-	}
-	return {
-		caregiver_id: dbRows[0].caregiver_id,
-		care_recipient_id: dbRows[0].care_recipient_id,
-		events: dbRows.map((dbRow) => parseEventData([dbRow]))
-	}
-}
-
-export async function getVisit(visit_id: string): Promise<Visit> {
-	return connection.query(buildQuery({visit_id: visit_id})).then(parseVisitData)
-}
-
-export async function getVisits(filterOptions: FilterOptions): Promise<Visit> { 
-	return connection.query(buildQuery(filterOptions)).then(parseVisitData)
+	// return JSON.parse(dbRow.payload_as_text);
 }
 
 export function getEvent(id: string): Promise<Event> {
 	const queryString = `
-    SELECT id, timestamp, payload_as_text, event_type, care_recipient_id, caregiver_id
-    FROM ${DB_TABLE}
-    WHERE (id = '${id}')
-    ORDER BY timestamp;
+  SELECT * 
+  FROM ${DB_TABLE}
+  WHERE (id = '${id}');
   `;
-	return connection.query(queryString).then(parseEventData)
+  return connection.query(queryString).then(dbRows => {
+    if (dbRows.length === 0) {
+      throw new DBError('no event data found')
+    }
+    return parseEventData(dbRows[0])
+  })
 };
 
-export function getEvents(filterOptions: FilterOptions): Promise<Event> {
-	return connection.query(buildQuery(filterOptions)).then(parseEventData)
+export function getEvents(filterOptions: FilterOptions, order: string = 'DESC'): Promise<Event[]> {
+	return connection.query(buildQuery(filterOptions, order))
+  .then(dbRows => dbRows.map(parseEventData))
 };
+
+function parseVisitData(dbRows: any[]): Visit {
+  const length = dbRows.length;
+	if (length === 0) {
+		throw new DBError('no visit data found')
+	}
+  const firstEventTime = dbRows[length - 1].timestamp;
+	return {
+		care_recipient_id: dbRows[0].care_recipient_id,
+		caregiver_id: dbRows[0].caregiver_id,
+    visit_id: dbRows[0].visit_id,
+    date: firstEventTime,
+    events: dbRows.map(parseEventData),
+  }
+}
+
+export async function getVisit(visit_id: string): Promise<Visit> {
+	return connection.query(buildQuery({ visit_id }))
+  .then(parseVisitData)
+}
+
+export async function getVisits(filterOptions: FilterOptions): Promise<Visit[]> {
+  const query = buildQuery(filterOptions);
+  return connection.query(query)
+  .then(dbRows => {
+    return _.chain(dbRows)
+      .groupBy('visit_id')
+      .map(parseVisitData)
+      .value();
+  });
+}
 
 export async function createConnection() {
 	return mysql.createConnection({
-  	host: DB_HOST,
-  	user: DB_USER,
-  	password: DB_PASSWORD,
-  	database: DB_NAME
+    database: DB_NAME,
+    host: DB_HOST,
+    password: DB_PASSWORD,
+    user: DB_USER
   })
   .then(val => {
-		connection = val;
-		return connection
-	});
+    connection = val;
+    return connection
+  });  
 }

@@ -17,19 +17,24 @@
     "dev": "nodemon"
   },
   "dependencies": {
-    "@types/dotenv": "^6.1.1",
-    "@types/express-validator": "^3.0.0",
-    "@types/mysql": "^2.15.7",
+    "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "express": "^4.16.4",
     "express-validator": "^6.1.1",
+    "lodash": "^4.17.15",
     "mysql": "^2.17.1",
     "promise-mysql": "^4.1.0",
-    "swagger-ui": "^3.23.6"
+    "swagger-ui": "^3.23.6",
+    "common": "file:../common"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/dotenv": "^6.1.1",
     "@types/express": "^4.16.1",
+    "@types/express-validator": "^3.0.0",
     "@types/jest": "^23.3.3",
+    "@types/lodash": "^4.14.137",
+    "@types/mysql": "^2.15.7",
     "@types/node": "^10.14.6",
     "@types/supertest": "^2.0.7",
     "coveralls": "^3.0.2",

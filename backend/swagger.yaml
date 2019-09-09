@@ -1,0 +1,331 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server for visit and event data"
+  version: "1.0.0"
+  title: "visits api"
+host: "localhost:8000"
+basePath: "/api/v1"
+tags:
+- name: "visits"
+  description: "access to particular visits"
+- name: "events"
+  description: "Access to particular events"
+- name: "caregivers"
+  description: "events/visits by a caregiver"
+- name: "care recipients"
+  description: "events/visits to a care recipient"
+schemes:
+- "https"
+- "http"
+paths:
+  /visits/{visit_id}:
+    get:
+      tags:
+      - "visits"
+      summary: "get events that are part of a particular visit by their visit_id"
+      description: ""
+      operationId: "getVisitByID"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "visit_id"
+        type: "string"
+        required: true
+      - in: "query"
+        type: "string"
+        name: "timeFrom"
+        description: "filter by time"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeTo"
+        description: "filter by time"
+        required: false
+      responses:
+        422:
+          description: "Invalid input"
+        404:
+          description: "resource not found"
+        500:
+          description: "Server error"
+        200:
+          description: "Status OK"
+          schema:
+            $ref: '#/definitions/Visit'
+  /events/{event_id}:
+    get:
+      tags:
+      - "events"
+      summary: "get a particular event"
+      description: ""
+      operationId: "getEventByID"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "event_id"
+        type: "string"
+        required: true
+      responses:
+        422:
+          description: "Invalid input"
+        404:
+          description: "resource not found"
+        500:
+          description: "Server error"
+        200:
+          description: "Status OK"
+          schema:
+            $ref: '#/definitions/Event'
+  /caregivers/{caregiver_id}/events:
+    get:
+      tags:
+      - "caregivers"
+      summary: "get events for caregiver filtered by query params"
+      description: ""
+      operationId: "getEventsForCaregiver"
+      parameters:
+      - in: "path"
+        name: "caregiver_id"
+        type: "string"
+        required: true
+      - in: "query"
+        name: "visit_id"
+        type: "string"
+        required: false
+      - in: "query"
+        name: "care_recipient_id"
+        type: "string"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeFrom"
+        description: "filter by time"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeTo"
+        description: "filter by time"
+        required: false
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      responses:
+        422:
+          description: "Invalid input"
+        404:
+          description: "resource not found"
+        500:
+          description: "Server error"
+        200:
+          description: "Status OK"
+          schema: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Event"
+            }
+          }
+  /caregivers/{caregiver_id}/visits:
+    get:
+      tags:
+      - "caregivers"
+      summary: "get visits for caregiver filtered by query params"
+      description: ""
+      operationId: "getVisitsForCaregiver"
+      parameters:
+      - in: "path"
+        name: "caregiver_id"
+        type: "string"
+        required: true
+      - in: "query"
+        name: "visit_id"
+        type: "string"
+        required: false
+      - in: "query"
+        name: "care_recipient_id"
+        type: "string"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeFrom"
+        description: "filter by time"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeTo"
+        description: "filter by time"
+        required: false
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      responses:
+        405:
+          description: "Invalid input"
+        404:
+          description: "resource not found"
+        500:
+          description: "Server error"
+        200:
+          description: "Status OK"
+          schema: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Visit"
+            }
+          }
+          
+  /care_recipients/{care_recipient_id}/events:
+    get:
+      tags:
+      - "care recipients"
+      summary: "get events for care recipient filtered by query params"
+      description: ""
+      operationId: "getEventsByCareRecipient"
+      parameters:
+      - in: "path"
+        name: "care_recipient_id"
+        type: "string"
+        required: true
+      - in: "query"
+        name: "visit_id"
+        type: "string"
+        required: false
+      - in: "query"
+        name: "caregiver_id"
+        type: "string"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeFrom"
+        description: "filter by time"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeTo"
+        description: "filter by time"
+        required: false
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      responses:
+        405:
+          description: "Invalid input"
+        404:
+          description: "resource not found"
+        500:
+          description: "Server error"
+        200:
+          description: "Status OK"
+          schema: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Event"
+            }
+          }
+  /care_recipients/{care_recipient_id}/visits:
+    get:
+      tags:
+      - "care recipients"
+      summary: "get visits for care recipient filtered by query params"
+      description: ""
+      operationId: "getVisitsByCareRecipient"
+      parameters:
+      - in: "path"
+        name: "care_recipient_id"
+        type: "string"
+        required: true
+      - in: "query"
+        name: "visit_id"
+        type: "string"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeFrom"
+        description: "filter by time"
+        required: false
+      - in: "query"
+        type: "string"
+        name: "timeTo"
+        description: "filter by time"
+        required: false
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      responses:
+        405:
+          description: "Invalid input"
+        404:
+          description: "resource not found"
+        500:
+          description: "Server error"
+        200:
+          description: "Status OK"
+          schema: {
+            type: "array",
+            items: {
+              $ref: "#/definitions/Event"
+            }
+          }
+  
+securityDefinitions:
+  carestore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://localhost:8000/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      read:events: "read event data"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Visit:
+    type: "object"
+    properties:
+      visit_id:
+        type: "string"
+        format: "GUID"
+      caregiver_id:
+        type: "string"
+        format: "GUID"
+      care_recipient_id:
+        type: "string"
+        format: "GUID"
+      events:
+        type: "array"
+        items: {
+          $ref: "#/definitions/Event"
+        }
+    xml:
+      name: "Visit"
+  Event:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "GUID"
+      timestamp:
+        type: "string"
+        format: "ISO8601 date"
+      payload:
+        type: "string"
+        format: "json"
+      event_type:
+        type: "string"
+    xml:
+      name: "Event"

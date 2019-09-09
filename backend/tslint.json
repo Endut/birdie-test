@@ -2,5 +2,16 @@
   "extends": [
     "tslint:latest",
     "tslint-config-prettier"
-  ]
+  ],
+  "rules": {
+    "interface-name" : [true, "never-prefix"],
+    "no-console": false,
+    "object-literal-sort-keys": false,
+	  "variable-name": {
+	  	"options": [
+	    	"allow-snake-case"
+	  	]
+	  },
+	  "ordered-imports": false
+  }
 }
