@@ -1,8 +1,6 @@
 import { createStore, StoreEnhancer } from 'redux';
-// import createSagaMiddleware from 'redux-saga';
-// import createBrowserHistory from 'history/createBrowserHistory';
 import { rootReducer } from './reducers';
-// import initSaga from '@App/store/sagas';
+
 
 declare global {
   interface Window {
@@ -17,7 +15,8 @@ declare global {
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
-  rootReducer
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   // composeEnhancers(applyMiddleware(sagaMiddleware)),
 );
 

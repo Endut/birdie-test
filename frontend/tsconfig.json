@@ -43,6 +43,6 @@
     "src/setupTests.ts"
   ],
   "include": [
-    "src"
+    "src/**/*"
   ]
 }
