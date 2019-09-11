@@ -1,6 +1,8 @@
-import { createStore, StoreEnhancer } from 'redux';
+import { createStore, StoreEnhancer, applyMiddleware, compose } from 'redux';
 import { rootReducer } from './reducers';
+import createSagaMiddleware from 'redux-saga'
 
+import rootSaga from './sagas';
 
 declare global {
   interface Window {
@@ -9,17 +11,18 @@ declare global {
   }
 }
 
-// const sagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware();
 // export const history = createBrowserHistory();
 
-// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 
 const store = createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeEnhancers(applyMiddleware(sagaMiddleware))
   // composeEnhancers(applyMiddleware(sagaMiddleware)),
 );
 
-// sagaMiddleware.run(initSaga);
+sagaMiddleware.run(rootSaga);
 
 export default store;

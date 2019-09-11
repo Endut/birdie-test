@@ -1,16 +1,15 @@
-import { Visit } from 'common';
 import { combineReducers } from 'redux';
 import { endDateReducer, startDateReducer } from './dateReducers';
-import { visitsReducer } from './visitsReducers';
+import { visitsReducer, VisitsState } from './visitsReducers';
 
 export type RootState = Readonly<{
 	startDate: Date,
 	endDate: Date,
-	visits: Visit[]
+	visitsState: VisitsState,
 }>;
 
 export const rootReducer = combineReducers<RootState>({
 	startDate: startDateReducer,
 	endDate: endDateReducer,
-	visits: visitsReducer
+	visitsState: visitsReducer
 });

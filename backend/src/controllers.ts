@@ -95,6 +95,7 @@ export const getVisitsForCareRecipient = [
     const { caregiver_id, visit_id, alert_id, timeTo, timeFrom } = req.query;
 
     const visits: Visit[] = await getVisits({ care_recipient_id, caregiver_id, visit_id, alert_id, timeTo, timeFrom });
+    console.log(visits);
     return res.status(200).json(visits);
   })
 ]

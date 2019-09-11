@@ -1,29 +1,29 @@
 import { SET_START_DATE, SET_END_DATE, DateActionType } from '../actions/dateActions';
 
 // initial states for dates
-const endDate = new Date();
-const startDate = new Date(endDate);
-startDate.setMonth(startDate.getMonth() - 12);
+// hard coded here to make code that uses these dates without side-effects
+// for testing purposes, but can grab fresh dates in App component constructor
+export const initStartDate = new Date(2019, 3, 22);
+
+export const initEndDate = new Date(2019, 4, 11);
 
 export interface DateState {
 	startDate: Date,
 	endDate: Date
 }
 
-export function startDateReducer(state: Date = startDate, action: DateActionType): Date {
+export function startDateReducer(state: Date = initStartDate, action: DateActionType): Date {
 	switch (action.type) {
 		case SET_START_DATE: {
-			console.log("set start date reducer");
 			return action.payload;
 		}
 		default: return state;
 	}
 }
 
-export function endDateReducer(state: Date = endDate, action: DateActionType): Date {
+export function endDateReducer(state: Date = initEndDate, action: DateActionType): Date {
 	switch (action.type) {
 		case SET_END_DATE: {
-			console.log("set end date reducer");
 			return action.payload;
 		}
 		default: return state;
