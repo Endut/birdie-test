@@ -1,26 +1,20 @@
-import { Visit } from 'common';
+import { Visit, Event } from 'common';
 import { FETCH_VISITS_BEGIN, FETCH_VISITS_SUCCESS, FETCH_VISITS_ERROR } from '../actions/visitActions'; 
-import { initStartDate, initEndDate } from './dateReducers';
-
-export function getEndDate(visits: Visit[]): Date {
-  return visits[0] ? new Date(visits[0].date) : initEndDate;
-}
-
-export function getStartDate(visits: Visit[]): Date {
-  return visits[visits.length - 1] ? new Date(visits[visits.length - 1].date) : initStartDate;
-}
+import { getStartDate, getEndDate } from '../selectors';
 
 export interface VisitsState {
   isLoading: boolean;
   visits: Visit[];
+  events: Event[];
 }
 
 const initVisitsState = {
   isLoading: false,
-  visits: []
+  visits: [],
+  events: []
 }
 
-function addNewVisits(oldVisits: Visit[], newVisits: Visit[]): Visit[] {
+export function addNewVisits(oldVisits: Visit[], newVisits: Visit[]): Visit[] {
   if (oldVisits.length === 0) {
     return newVisits;
   }
@@ -36,19 +30,15 @@ function addNewVisits(oldVisits: Visit[], newVisits: Visit[]): Visit[] {
   const newStartDate = getStartDate(newVisits);
   
   if (newEndDate.getTime() >= oldEndDate.getTime() && newStartDate.getTime() <= oldStartDate.getTime()) {
-    
     return newVisits
   
   } else if (newStartDate.getTime() > oldEndDate.getTime()) {
-
     return oldVisits.concat(newVisits)
   
   } else if (newEndDate.getTime() < oldStartDate.getTime()) {
-    
     return newVisits.concat(oldVisits)
   
   } else {
-    
     return oldVisits
   
   }
@@ -60,7 +50,9 @@ export function visitsReducer(state: VisitsState = initVisitsState, action: any)
 			return { ...state, isLoading: true }
 		}
 		case FETCH_VISITS_SUCCESS: {
-      return { visits: addNewVisits(state.visits, action.payload), isLoading: false};
+      const visits = addNewVisits(state.visits, action.payload);
+      const events = visits.map(visit => visit.events).reduce((a, b) => a.concat(b), []);
+      return { visits: addNewVisits(state.visits, action.payload), events: events, isLoading: false};
 		}
 		case FETCH_VISITS_ERROR: {
 			return { ...state, isLoading: false };

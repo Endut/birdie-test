@@ -1,59 +1,49 @@
 {
-  "name": "frontend",
+  "name": "front-end",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
-    "@types/bootstrap": "^4.3.1",
-    "@types/jest": "24.0.18",
-    "@types/lodash": "^4.14.138",
-    "@types/node": "12.7.3",
-    "@types/react": "16.9.2",
-    "@types/react-bootstrap": "^0.32.19",
-    "@types/react-datepicker": "^2.8.1",
-    "@types/react-dom": "16.9.0",
-    "@types/react-router-dom": "^4.3.5",
-    "@types/victory": "^31.0.21",
-    "@types/react-redux": "^7.1.2",
-    "typescript": "3.6.2"
-  },
   "dependencies": {
-    "@types/styled-components": "^4.1.19",
-    "bootstrap": "^4.3.1",
     "common": "file:../common",
-    "create-react-class": "^15.6.3",
     "lodash": "^4.17.15",
-    "react": "^16.9.0",
+    "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.12",
-    "react-datepicker": "^2.9.4",
-    "react-dom": "^16.9.0",
+    "react-datepicker": "^2.0.0",
+    "react-dom": "^16.8.6",
     "react-emoji-render": "^1.0.0",
-    "react-redux": "^7.1.1",
-    "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1",
-    "redux": "^4.0.4",
-    "styled-components": "^4.3.2",
+    "react-scripts-redux-ts": "1.2.1",
+    "redux-saga": "^1.0.2",
+    "styled-components": "^4.2.0",
     "victory": "^33.0.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject",
+    "create:component": "./node_modules/hygen/lib/bin.js component create",
+    "create:store:item": "./node_modules/hygen/lib/bin.js store create"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "jest": {
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "@App/(.*)": "<rootDir>/src/$1"
+    }
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@types/lodash": "^4.14.138",
+    "@types/history": "^4.7.2",
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.1",
+    "@types/react": "^16.8.17",
+    "@types/react-bootstrap": "^0.32.19",
+    "@types/react-datepicker": "^2.9.2",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.1.2",
+    "@types/react-router-dom": "^4.3.5",
+    "@types/redux": "^3.6.0",
+    "@types/styled-components": "^4.1.15",
+    "@types/victory": "^31.0.21",
+    "typescript": "^3.4.5"
   }
 }

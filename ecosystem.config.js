@@ -18,7 +18,7 @@ module.exports = {
   },
   {
     name: 'FRONTEND',
-    script: './node_modules/react-scripts/bin/react-scripts.js',
+    script: './node_modules/.bin/react-scripts-ts',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     args: 'start',

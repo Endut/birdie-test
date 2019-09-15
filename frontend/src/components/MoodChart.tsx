@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Event } from 'common';
 import {
   VictoryChart,
@@ -15,6 +15,7 @@ interface ExtendedMoodEvent extends Event {
   moodValue: number
 }
 
+// TODO: refactor these averaging/stats functions to separate module
 function sum(numbers: number[]): number {
   return _.reduce(numbers, (a, b) => a + b, 0)
 }
@@ -24,16 +25,15 @@ function average(numbers: number[]): number {
 }
 
 function averageForEvents(events: ExtendedMoodEvent[]): ExtendedMoodEvent {
-  // events[0] will actually be chronologically last of the window's events, but it makes sense to use it as 
-  // this datum's 'date' value because we are interested in the averaged mood observations leading up to this point in time
+  console.log(events);
   const moodValues = events.map(e => e.moodValue);
-  return { ...events[0], date: events[0].date, moodValue: average(moodValues) }
+  return { ...events[0], date: events[events.length - 1].date, moodValue: average(moodValues) }
 }
 
 function makeWindow<T>(windowSize: number): (_arrayMember: T, index: number, array: T[]) => T[] {
   return (_arrayMember: T, index: number, array: T[]): T[] => {
-    const start = Math.max(0, index);
-    const end = Math.min(array.length, index + windowSize);
+    const start = Math.max(0, index - windowSize);
+    const end = index;
     const arr = _.slice(array, start, end);
 
     return arr;
@@ -57,6 +57,7 @@ function movingAverageFilter(events: Event[], avgSize: number): any[] {
 export class MoodChart extends React.Component<{ events: Event[] }, { }> {
 
   clickEventCallback = (): Event => {
+    // TODO: use this to route directly to the visit card for this event to give user more details
     return this.props.events[0]
   }
 
@@ -66,12 +67,13 @@ export class MoodChart extends React.Component<{ events: Event[] }, { }> {
       <VictoryChart
       	theme={VictoryTheme.material}
         scale={{x: "time"}}
-        containerComponent={<VictoryVoronoiContainer
-          onActivated={(points, props) => {
-            this.clickEventCallback = (): Event => {return points[0]}
-          }}
+        containerComponent={
+          <VictoryVoronoiContainer
+            onActivated={(points, props) => {
+              this.clickEventCallback = (): Event => {return points[0]}
+            }}
           />}
-        >
+      >
      		<VictoryLine
      			style={{
      				data: { stroke: "#c43a31" },

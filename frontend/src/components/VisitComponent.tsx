@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Button, Card, Collapse, ListGroup } from 'react-bootstrap';
 import { Visit } from 'common';
 import { getEventComponent } from './EventComponent';
@@ -35,7 +35,7 @@ export default class VisitComponent extends React.Component<{ visit: Visit }, { 
         >visit events</Button>
         <Collapse in={this.state.open}>
           <ListGroup className="list-group-flush" id={visit.visit_id}>
-            {visit.events.map(getEventComponent)}
+            {visit.events.reverse().map(getEventComponent)}
           </ListGroup>
         </Collapse>
 			</Card>

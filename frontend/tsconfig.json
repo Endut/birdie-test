@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@App/*": [
+        "src/*"
+      ]
+    },
     "outDir": "build/dist",
     "module": "esnext",
     "target": "es5",
-    "types": [
-      "react",
-      "jest",
-      "node"
-    ],
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "types": ["react", "jest", "node"],
+    "lib": ["es2017", "dom"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
@@ -24,14 +22,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true
+    "noUnusedLocals": true
   },
   "exclude": [
     "node_modules",
@@ -40,9 +31,7 @@
     "acceptance-tests",
     "webpack",
     "jest",
-    "src/setupTests.ts"
-  ],
-  "include": [
-    "src/**/*"
+    "src/setupTests.ts",
+    "__tests__"
   ]
 }

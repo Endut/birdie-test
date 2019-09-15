@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { Card, ListGroupItem } from 'react-bootstrap';
 import { Event } from 'common';
-import { EventTypeEmoji } from '../renderEnums';
+import { EventTypeEmoji } from '@App/renderEnums';
 import { Twemoji as Emoji } from 'react-emoji-render';
 
 function leftPadTime(time: number): string {
@@ -108,9 +108,11 @@ export class TaskEvent extends React.Component<{ event: Event }, {}> {
         <Card.Text>
           task description: {event.payload.task_definition_description}
         </Card.Text>
-        <Card.Text>
-          note from care recipient: {event.payload.task_schedule_note}
-        </Card.Text>
+        {event.payload.task_schedule_note ? 
+          <Card.Text>
+            note from care recipient: {event.payload.task_schedule_note}
+          </Card.Text>
+        : null}
       </>
     );
     return(<EventComponent event={this.props.event} children={note}/>);

@@ -1,7 +1,3 @@
-export enum MoodEmoji {
-
-}
-
 interface Lookup {
 	[key: string]: string
 }

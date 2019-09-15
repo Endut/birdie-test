@@ -95,7 +95,6 @@ export const getVisitsForCareRecipient = [
     const { caregiver_id, visit_id, alert_id, timeTo, timeFrom } = req.query;
 
     const visits: Visit[] = await getVisits({ care_recipient_id, caregiver_id, visit_id, alert_id, timeTo, timeFrom });
-    console.log(visits);
     return res.status(200).json(visits);
   })
 ]
@@ -130,7 +129,7 @@ export const getMoodObservationsForCareRecipient = [
     const { care_recipient_id } = req.params;
     const { timeTo, timeFrom } = req.query;
 
-    const events: Event[] = await getEvents({ care_recipient_id, timeTo, timeFrom, event_type: 'mood_observation' }, 'ASC');
+    const events: Event[] = await getEvents({ care_recipient_id, timeTo, timeFrom, event_type: 'mood_observation' });
     return res.status(200).json(events);
   })
 ];

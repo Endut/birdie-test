@@ -53,7 +53,7 @@ function addFilters(options: FilterOptions): string {
   return combineConditions(conditions)
 }
 
-function buildQuery(filterOptions?: FilterOptions, order: string = 'DESC'): string {
+function buildQuery(filterOptions?: FilterOptions, order: string = 'ASC'): string {
 	let query: string = `
   SELECT caregiver_id, visit_id, care_recipient_id, id, payload_as_text, timestamp, event_type, alert_id 
   FROM ${DB_TABLE} 
@@ -94,7 +94,7 @@ export function getEvent(id: string): Promise<Event> {
   })
 };
 
-export function getEvents(filterOptions: FilterOptions, order: string = 'DESC'): Promise<Event[]> {
+export function getEvents(filterOptions: FilterOptions, order: string = 'ASC'): Promise<Event[]> {
 	return connection.query(buildQuery(filterOptions, order))
   .then(dbRows => dbRows.map(parseEventData))
 };
@@ -104,13 +104,20 @@ function parseVisitData(dbRows: any[]): Visit {
 	if (length === 0) {
 		throw new DBError('no visit data found')
 	}
-  const firstEventTime = dbRows[length - 1].timestamp;
-	return {
+  // unfortunately have to sort here because can't find a way to have the database sort varchars that
+  // are either +01:00 or Zulu time
+  const events = dbRows.map(parseEventData).sort((a, b) => {
+      return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+    });
+
+  const firstEventTime = dbRows[0].timestamp;
+	
+  return {
 		care_recipient_id: dbRows[0].care_recipient_id,
 		caregiver_id: dbRows[0].caregiver_id,
     visit_id: dbRows[0].visit_id,
     date: firstEventTime,
-    events: dbRows.map(parseEventData),
+    events
   }
 }
 
