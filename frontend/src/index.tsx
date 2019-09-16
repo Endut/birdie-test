@@ -14,7 +14,10 @@ import registerServiceWorker from './serviceWorker';
 ReactDOM.render(
 	<Provider store={store as any}>
 		<Router >
-			<Route path="/:care_recipient_id" component={App}>
+			<Route
+				path="/:care_recipient_id"
+				component={App}
+				>
 			</Route>
 		</Router>
 	</Provider>,

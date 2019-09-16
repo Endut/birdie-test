@@ -2,6 +2,7 @@ import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { fetchVisits as fetchVisitsFromAPI } from '../../api';
 import { FETCH_VISITS_BEGIN, fetchVisitsBegin, fetchVisitsSuccess, fetchVisitsError } from '../actions/visitActions'; 
 import { SET_START_DATE, SET_END_DATE } from '../actions/dateActions';
+import { setCareRecipient } from '../actions/careRecipientActions';
 
 import { AnyAction } from 'redux'; 
 import { getVisitsLimits, getCareRecipient } from '../selectors';
@@ -29,6 +30,7 @@ export function* parseDatesAndFetch(action: AnyAction) {
 
 export function* fetchVisitsTask(action: AnyAction) {
 	const { care_recipient_id, startDate, endDate } = action;
+	yield put(setCareRecipient(care_recipient_id))
 	try {
 		const data = yield call(fetchVisitsFromAPI, care_recipient_id, startDate, endDate);
 		yield put(fetchVisitsSuccess(data))

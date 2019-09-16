@@ -17,9 +17,3 @@ export const EventTypeEmoji: Lookup = {
 	'check_out': ':wave:',
 	'visit_completed': ':house:'
 }
-
-export enum MoodEnum {
-	sad = -1,
-	okay = 0,
-	happy = 1
-}

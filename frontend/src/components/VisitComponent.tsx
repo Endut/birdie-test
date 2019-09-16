@@ -20,6 +20,7 @@ export default class VisitComponent extends React.Component<{ visit: Visit }, { 
 
 	render() {
 		const visit = this.props.visit;
+    const events = Array.from(visit.events).reverse();
     return(
 			<Card>
 				<Card.Body>
@@ -35,7 +36,7 @@ export default class VisitComponent extends React.Component<{ visit: Visit }, { 
         >visit events</Button>
         <Collapse in={this.state.open}>
           <ListGroup className="list-group-flush" id={visit.visit_id}>
-            {visit.events.reverse().map(getEventComponent)}
+            {events.map(getEventComponent)}
           </ListGroup>
         </Collapse>
 			</Card>

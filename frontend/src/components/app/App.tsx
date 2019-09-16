@@ -6,13 +6,14 @@ import { MoodChart } from '../MoodChart';
 import { LoadingIndicator } from '../LoadingIndicator';
 import { Container, Collapse, Row, Col, Tab, Tabs } from 'react-bootstrap';
 
-import DatePicker from 'react-datepicker';
+import DatePicker from 'react-date-picker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { RootState } from '@App/store/reducers/index';
 import { connect } from 'react-redux';
 import { AnyAction, Dispatch } from 'redux';
 
+import { setCareRecipient } from '@App/store/actions/careRecipientActions';
 import { setStartDate, setEndDate } from '@App/store/actions/dateActions';
 import { fetchVisitsBegin } from '@App/store/actions/visitActions';
 
@@ -23,18 +24,20 @@ interface AppProps {
   fetchVisitsBegin: (id: string, startDate: Date, endDate: Date) => AnyAction;
   setStartDate: (date: Date) => AnyAction;
   setEndDate: (date: Date) => AnyAction;
+  setCareRecipient: (id: string) => AnyAction;
   isLoading: boolean;
   startDate: Date;
   endDate: Date;
   visits: Visit[];
   mood_events: Event[];
   care_recipient_id: string;
+  id_from_url: string
 }
 
 export class App extends React.Component<AppProps, {}> {
 
   componentDidMount() {
-    this.props.fetchVisitsBegin(this.props.care_recipient_id, this.props.startDate, this.props.endDate);
+    this.props.fetchVisitsBegin(this.props.id_from_url, this.props.startDate, this.props.endDate);
   }
 
   render() {
@@ -45,16 +48,18 @@ export class App extends React.Component<AppProps, {}> {
           <Row>
             <Col>
               <DatePicker
-                dateFormat="dd/MM/yyyy"
-                selected={startDate}
+                format="dd/MM/yyyy"
+                value={startDate}
                 onChange={setStartDate}
+                clearIcon={null}
               />
             </Col>
             <Col>
               <DatePicker
-                dateFormat="dd/MM/yyyy"
-                selected={endDate}
+                format="dd/MM/yyyy"
+                value={endDate}
                 onChange={setEndDate}
+                clearIcon={null}
               />
             </Col>
           </Row>
@@ -82,15 +87,15 @@ export class App extends React.Component<AppProps, {}> {
 }
 
 const mapStateToProps = (state: RootState, ownProps: any) => {
-  const { visitsState, startDate, endDate } = state;
-  const visits = filterVisits(state);
+  const { visitsState, startDate, endDate, care_recipient_id } = state;
   return {
-    visits: visits,
+    visits: filterVisits(state),
     mood_events: filterEvents(state, 'mood_observation'),
     isLoading: visitsState.isLoading,
-    care_recipient_id: ownProps.match.params.care_recipient_id,
+    care_recipient_id,
     startDate,
-    endDate
+    endDate,
+    id_from_url: ownProps.match.params.care_recipient_id
   }
 };
 
@@ -99,6 +104,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
     setStartDate: (date: Date) => dispatch(setStartDate(date)),
     setEndDate: (date: Date) => dispatch(setEndDate(date)),
     fetchVisitsBegin: (id: string, startDate: Date, endDate: Date) => dispatch(fetchVisitsBegin(id, startDate, endDate)),
+    setCareRecipient: (id: string) => dispatch(setCareRecipient(id))
   }
 };
 

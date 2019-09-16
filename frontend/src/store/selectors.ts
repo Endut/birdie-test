@@ -24,31 +24,7 @@ export const getVisitsLimits = (state: RootState): { oldStartDate: Date, oldEndD
 }
 
 export const getCareRecipient = (state: RootState): string => {
-	const visits = state.visitsState.visits;
-	return visits[0] ? visits[0].care_recipient_id : ''; 
-}
-
-export function getRelevantVisitsDesc(state: RootState, events_descending: boolean = true): Visit[] {
-	const visits = state.visitsState.visits;
-	const startDate = state.startDate;
-	const endDate = state.endDate;
-  const visitsArray: Visit[] = [];
-  let visit: Visit;
-  let visitDate: Date;
-  for (let i = visits.length - 1; i >= 0; i--) {
-    // using this instead of fancy declarative Array.prototype methods (eg visits.reverse().filter(...))
-    // to avoid having 2 potentially costly loops over visits array
-    visit = visits[i];
-    visitDate = new Date(visit.date);
-      
-    if (events_descending) {
-      visit.events = visit.events.reverse();
-    }
-    if ((visitDate.getTime() >= startDate.getTime()) && (visitDate.getTime() <= endDate.getTime())) {
-      visitsArray.push(visit);
-    }
-  }
-  return visitsArray
+	return state.care_recipient_id;
 }
 
 export function filterVisits(state: RootState): Visit[] {
