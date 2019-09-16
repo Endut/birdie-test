@@ -53,24 +53,19 @@ function addFilters(options: FilterOptions): string {
   return combineConditions(conditions)
 }
 
-function buildQuery(filterOptions?: FilterOptions, order: string = 'ASC'): string {
-	let query: string = `
-  SELECT caregiver_id, visit_id, care_recipient_id, id, payload_as_text, timestamp, event_type, alert_id 
-  FROM ${DB_TABLE} 
-  `;
+export function buildQuery(filterOptions?: FilterOptions, order: string = 'ASC'): string {
+	let query: string = `SELECT caregiver_id, visit_id, care_recipient_id, id, payload_as_text, timestamp, event_type, alert_id FROM ${DB_TABLE} `;
   if (filterOptions) {
     query += addFilters(filterOptions)
   }
   if (order) {
-    query += `
-  ORDER BY timestamp ${order}; 
-  `
+    query += `ORDER BY timestamp ${order};`
   }
   console.log(query);
   return query;
 }
 
-function parseEventData(dbRow: any): Event {
+export function parseEventData(dbRow: any): Event {
 	return {
 		id: dbRow.id,
 		timestamp: dbRow.timestamp,
@@ -86,6 +81,7 @@ export function getEvent(id: string): Promise<Event> {
   FROM ${DB_TABLE}
   WHERE (id = '${id}');
   `;
+  console.log(queryString)
   return connection.query(queryString).then(dbRows => {
     if (dbRows.length === 0) {
       throw new DBError('no event data found')
