@@ -1,4 +1,4 @@
-import { Visit } from 'common';
+import { Visit } from '@App/common';
 
 export const FETCH_VISITS_BEGIN = 'FETCH_VISITS_BEGIN';
 export const FETCH_VISITS_SUCCESS = 'FETCH_VISITS_SUCCESS';

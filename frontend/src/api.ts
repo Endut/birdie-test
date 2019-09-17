@@ -1,4 +1,4 @@
-import { Visit } from 'common';
+import { Visit } from '@App/common';
 
 const URL = 'http://localhost:8000/api/v1/care_recipients';
 
