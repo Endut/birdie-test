@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Visit, Event } from '@App/common';
+import { Visit, Event } from 'common';
 import VisitComponent from '../VisitComponent';
 import { MoodChart } from '../MoodChart';
 import { LoadingIndicator } from '../LoadingIndicator';

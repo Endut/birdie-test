@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Card, Collapse, ListGroup } from 'react-bootstrap';
-import { Visit } from '@App/common';
+import { Visit } from 'common';
 import { getEventComponent } from './EventComponent';
 
 export default class VisitComponent extends React.Component<{ visit: Visit }, { open: boolean }> {

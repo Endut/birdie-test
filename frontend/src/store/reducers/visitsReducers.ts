@@ -1,4 +1,4 @@
-import { Visit, Event } from '@App/common';
+import { Visit, Event } from 'common';
 import { FETCH_VISITS_BEGIN, FETCH_VISITS_SUCCESS, FETCH_VISITS_ERROR } from '../actions/visitActions'; 
 import { getStartDate, getEndDate } from '../selectors';
 

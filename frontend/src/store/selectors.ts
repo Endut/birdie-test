@@ -1,4 +1,4 @@
-import { Visit, Event } from '@App/common';
+import { Visit, Event } from 'common';
 import { RootState } from './reducers';
 
 import { initStartDate, initEndDate } from './reducers/dateReducers';

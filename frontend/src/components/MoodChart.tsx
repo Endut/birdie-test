@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Event } from '@App/common';
+import { Event } from 'common';
 
 import {
   VictoryChart,
