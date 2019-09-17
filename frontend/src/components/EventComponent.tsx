@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, ListGroupItem } from 'react-bootstrap';
-import { Event } from 'common';
+import { Event } from '@App/common';
 import { EventTypeEmoji } from '@App/renderEnums';
 import { Twemoji as Emoji } from 'react-emoji-render';
 

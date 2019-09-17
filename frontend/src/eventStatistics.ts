@@ -1,4 +1,4 @@
-import { Event } from 'common';
+import { Event } from '@App/common';
 import * as _ from 'lodash';
 
 enum MoodEnum {
