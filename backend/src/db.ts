@@ -71,7 +71,6 @@ export function parseEventData(dbRow: any): Event {
 		event_type: dbRow.event_type,
 		payload: JSON.parse(dbRow.payload_as_text)
 	}
-	// return JSON.parse(dbRow.payload_as_text);
 }
 
 export function getEvent(connection: mysql.Connection, id: string): Promise<Event> {
