@@ -19,7 +19,6 @@ export class MoodChart extends React.Component<{ events: Event[] }, { }> {
   }
 
   render() {
-    console.log( Math.floor(this.props.events.length * 0.125));
 		const data = movingAverageFilter(this.props.events, Math.floor(this.props.events.length * 0.125));
     return (
       <VictoryChart
