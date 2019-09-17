@@ -1,26 +1,30 @@
 [
   {
     "id": "50b0aae8-41a7-4a97-a0e9-1a37e37d547f",
-    "timestamp": "2019-04-23T00:00:00Z",
+    "timestamp": "2019-04-23T01:00:00Z",
     "event_type": "check_in",
+    "visit_id": "4d5dd0ad-92d1-4355-ab22-50822ea288b4",
+    "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
     "payload": {
       "id": "50b0aae8-41a7-4a97-a0e9-1a37e37d547f",
       "visit_id": "4d5dd0ad-92d1-4355-ab22-50822ea288b4",
-      "timestamp": "2019-04-23T00:00:00Z",
+      "timestamp": "2019-04-23T01:00:00Z",
       "event_type": "check_in",
       "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
       "care_recipient_id": "54818354-8208-4606-90a7-305c317e195e"
     },
-    "payload_as_text": "{\"id\": \"50b0aae8-41a7-4a97-a0e9-1a37e37d547f\",\"visit_id\": \"4d5dd0ad-92d1-4355-ab22-50822ea288b4\",\"timestamp\": \"2019-04-23T00:00:00Z\",\"event_type\": \"check_in\",\"caregiver_id\": \"4fe5ff14-fea0-498b-9659-fd51ce6c6bce\",\"care_recipient_id\": \"54818354-8208-4606-90a7-305c317e195e\"}"
+    "payload_as_text": "{\"id\": \"50b0aae8-41a7-4a97-a0e9-1a37e37d547f\",\"visit_id\": \"4d5dd0ad-92d1-4355-ab22-50822ea288b4\",\"timestamp\": \"2019-04-23T01:00:00Z\",\"event_type\": \"check_in\",\"caregiver_id\": \"4fe5ff14-fea0-498b-9659-fd51ce6c6bce\",\"care_recipient_id\": \"54818354-8208-4606-90a7-305c317e195e\"}"
   },
   {
     "id": "3aed2e00-a5f8-40c5-8cfc-f2477f3ea17a",
-    "timestamp": "2019-04-23T00:01:00Z",
+    "timestamp": "2019-04-23T01:01:00Z",
     "event_type": "check_in",
+    "visit_id": "4d5dd0ad-92d1-4355-ab22-50822ea288b4",
+    "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
     "payload": {
       "id": "3aed2e00-a5f8-40c5-8cfc-f2477f3ea17a",
       "visit_id": "4d5dd0ad-92d1-4355-ab22-50822ea288b4",
-      "timestamp": "2019-04-23T00:01:00Z",
+      "timestamp": "2019-04-23T01:01:00Z",
       "event_type": "check_in",
       "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
       "care_recipient_id": "54818354-8208-4606-90a7-305c317e195e"
@@ -29,22 +33,26 @@
   },
   {
     "id": "97eab7da-2bb5-4923-852c-8e3e6c6d95d6",
-    "timestamp": "2019-04-23T00:02:00Z",
+    "timestamp": "2019-04-23T02:02:00+01:00",
     "event_type": "check_in",
+    "visit_id": "4d5dd0ad-92d1-4355-ab22-50822ea288b4",
+    "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
     "payload": {
       "id": "97eab7da-2bb5-4923-852c-8e3e6c6d95d6",
       "visit_id": "4d5dd0ad-92d1-4355-ab22-50822ea288b4",
-      "timestamp": "2019-04-23T00:02:00Z",
+      "timestamp": "2019-04-23T02:02:00+01:00",
       "event_type": "check_in",
       "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
       "care_recipient_id": "54818354-8208-4606-90a7-305c317e195e"
     },
-    "payload_as_text": "{\"id\":\"97eab7da-2bb5-4923-852c-8e3e6c6d95d6\",\"visit_id\":\"4d5dd0ad-92d1-4355-ab22-50822ea288b4\",\"timestamp\":\"2019-04-23T00:02:00Z\",\"event_type\":\"check_in\",\"caregiver_id\":\"4fe5ff14-fea0-498b-9659-fd51ce6c6bce\",\"care_recipient_id\":\"54818354-8208-4606-90a7-305c317e195e\"}"
+    "payload_as_text": "{\"id\":\"97eab7da-2bb5-4923-852c-8e3e6c6d95d6\",\"visit_id\":\"4d5dd0ad-92d1-4355-ab22-50822ea288b4\",\"timestamp\":\"2019-04-23T02:02:00+01:00\",\"event_type\":\"check_in\",\"caregiver_id\":\"4fe5ff14-fea0-498b-9659-fd51ce6c6bce\",\"care_recipient_id\":\"54818354-8208-4606-90a7-305c317e195e\"}"
   },
   {
     "id": "69f26f70-c039-410a-ab33-59d9bfeded42",
     "timestamp": "2019-04-23T00:03:00Z",
     "event_type": "check_in",
+    "visit_id": "fe825de8-4165-4947-a1e5-1d3575f50aa3",
+    "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
     "payload": {
       "id": "69f26f70-c039-410a-ab33-59d9bfeded42",
       "visit_id": "fe825de8-4165-4947-a1e5-1d3575f50aa3",
@@ -59,6 +67,8 @@
     "id": "5c6547e2-8e8b-42dd-ba26-5cb4d2af3d1a",
     "timestamp": "2019-04-23T00:04:00Z",
     "event_type": "mood_observation",
+    "visit_id": "fe825de8-4165-4947-a1e5-1d3575f50aa3",
+    "caregiver_id": "4fe5ff14-fea0-498b-9659-fd51ce6c6bce",
     "payload": {
       "id": "5c6547e2-8e8b-42dd-ba26-5cb4d2af3d1a",
       "visit_id": "fe825de8-4165-4947-a1e5-1d3575f50aa3",

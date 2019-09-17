@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Event, Visit } from 'common'; 
-import { getVisit, getVisits, getEvent, getEvents } from './db';
+import { getVisit, getVisits, getEvent, getEvents, pool } from './db';
 import { check, validationResult } from 'express-validator';
 
 function invalidInputHandler(req: Request, res: Response, next: NextFunction) {
@@ -26,7 +26,7 @@ export const getVisitByID = [
   asyncHandler(async (req: Request, res: Response) => {
     const { visit_id } = req.params;
 
-    const visit: Visit = await getVisit(visit_id);
+    const visit: Visit = await getVisit(await pool.getConnection(), visit_id);
     return res.status(200).json(visit);
   })
 ];
@@ -39,7 +39,7 @@ export const getEventByID = [
   asyncHandler(async (req: Request, res: Response) => {
     const { event_id } = req.params;
 
-    const event: Event = await getEvent(event_id);
+    const event: Event = await getEvent(await pool.getConnection(), event_id);
     return res.status(200).json(event);
   })
 ];
@@ -57,7 +57,7 @@ export const getVisitsForCaregiver = [
     const { caregiver_id } = req.params;
     const { visit_id, alert_id, timeTo, timeFrom } = req.query;
 
-    const visits: Visit[] = await getVisits({ caregiver_id, visit_id, alert_id, timeTo, timeFrom });
+    const visits: Visit[] = await getVisits(await pool.getConnection(), { caregiver_id, visit_id, alert_id, timeTo, timeFrom });
     return res.status(200).json(visits);
   })
 ];
@@ -75,7 +75,7 @@ export const getEventsForCaregiver = [
     const { caregiver_id } = req.params;
     const { alert_id, visit_id, timeTo, timeFrom } = req.query;
 
-    const events: Event[] = await getEvents({ caregiver_id, alert_id, visit_id, timeTo, timeFrom});
+    const events: Event[] = await getEvents(await pool.getConnection(), { caregiver_id, alert_id, visit_id, timeTo, timeFrom });
     return res.status(200).json(events);
   })
 ];
@@ -94,7 +94,7 @@ export const getVisitsForCareRecipient = [
     const { care_recipient_id } = req.params;
     const { caregiver_id, visit_id, alert_id, timeTo, timeFrom } = req.query;
 
-    const visits: Visit[] = await getVisits({ care_recipient_id, caregiver_id, visit_id, alert_id, timeTo, timeFrom });
+    const visits: Visit[] = await getVisits(await pool.getConnection(), { care_recipient_id, caregiver_id, visit_id, alert_id, timeTo, timeFrom }, );
     return res.status(200).json(visits);
   })
 ]
@@ -113,7 +113,7 @@ export const getEventsForCareRecipient = [
     const { care_recipient_id } = req.params;
     const { caregiver_id, alert_id, visit_id, timeTo, timeFrom } = req.query;
 
-    const events: Event[] = await getEvents({ care_recipient_id, caregiver_id, alert_id, visit_id, timeTo, timeFrom });
+    const events: Event[] = await getEvents(await pool.getConnection(), { care_recipient_id, caregiver_id, alert_id, visit_id, timeTo, timeFrom });
     return res.status(200).json(events);
   })
 ];
@@ -128,8 +128,9 @@ export const getMoodObservationsForCareRecipient = [
   asyncHandler(async (req: Request, res: Response) => {
     const { care_recipient_id } = req.params;
     const { timeTo, timeFrom } = req.query;
+    const event_type = 'mood_observation';
 
-    const events: Event[] = await getEvents({ care_recipient_id, timeTo, timeFrom, event_type: 'mood_observation' });
+    const events: Event[] = await getEvents(await pool.getConnection(), { care_recipient_id, timeTo, timeFrom, event_type });
     return res.status(200).json(events);
   })
 ];

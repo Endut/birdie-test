@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { DBError } from './error';
 import { Event, Visit } from 'common';
 
-let connection: mysql.Connection;
+// let connection: mysql.Connection;
 
 export interface FilterOptions {
   care_recipient_id?: string,
@@ -61,7 +61,6 @@ export function buildQuery(filterOptions?: FilterOptions, order: string = 'ASC')
   if (order) {
     query += `ORDER BY timestamp ${order};`
   }
-  console.log(query);
   return query;
 }
 
@@ -75,13 +74,8 @@ export function parseEventData(dbRow: any): Event {
 	// return JSON.parse(dbRow.payload_as_text);
 }
 
-export function getEvent(id: string): Promise<Event> {
-	const queryString = `
-  SELECT * 
-  FROM ${DB_TABLE}
-  WHERE (id = '${id}');
-  `;
-  console.log(queryString)
+export function getEvent(connection: mysql.Connection, id: string): Promise<Event> {
+	const queryString = `SELECT * FROM ${DB_TABLE} WHERE (id = '${id}');`;
   return connection.query(queryString).then(dbRows => {
     if (dbRows.length === 0) {
       throw new DBError('no event data found')
@@ -90,12 +84,12 @@ export function getEvent(id: string): Promise<Event> {
   })
 };
 
-export function getEvents(filterOptions: FilterOptions, order: string = 'ASC'): Promise<Event[]> {
+export function getEvents(connection: mysql.Connection, filterOptions: FilterOptions, order: string = 'ASC', ): Promise<Event[]> {
 	return connection.query(buildQuery(filterOptions, order))
-  .then(dbRows => dbRows.map(parseEventData))
+    .then(dbRows => dbRows.map(parseEventData))
 };
 
-function parseVisitData(dbRows: any[]): Visit {
+export function parseVisitData(dbRows: any[]): Visit {
   const length = dbRows.length;
 	if (length === 0) {
 		throw new DBError('no visit data found')
@@ -117,20 +111,19 @@ function parseVisitData(dbRows: any[]): Visit {
   }
 }
 
-export async function getVisit(visit_id: string): Promise<Visit> {
-	return connection.query(buildQuery({ visit_id }))
-  .then(parseVisitData)
+export async function getVisit(connection: mysql.Connection, visit_id: string): Promise<Visit> {
+  return connection.query(buildQuery({ visit_id }))
+    .then(parseVisitData)
 }
 
-export async function getVisits(filterOptions: FilterOptions): Promise<Visit[]> {
-  const query = buildQuery(filterOptions);
-  return connection.query(query)
-  .then(dbRows => {
-    return _.chain(dbRows)
-      .groupBy('visit_id')
-      .map(parseVisitData)
-      .value();
-  });
+export async function getVisits(connection: mysql.Connection, filterOptions: FilterOptions, order: string = 'ASC' ): Promise<Visit[]> {
+  return connection.query(buildQuery(filterOptions, order))
+    .then(dbRows => {
+      return _.chain(dbRows)
+        .groupBy('visit_id')
+        .map(parseVisitData)
+        .value();
+    });
 }
 
 export async function createConnection() {
@@ -139,9 +132,20 @@ export async function createConnection() {
     host: DB_HOST,
     password: DB_PASSWORD,
     user: DB_USER
-  })
-  .then(val => {
-    connection = val;
-    return connection
   });  
 }
+
+export let pool: mysql.Pool;
+
+export async function createPool() {
+  return mysql.createPool({
+    connectionLimit: 5,
+    database: DB_NAME,
+    host: DB_HOST,
+    password: DB_PASSWORD,
+    user: DB_USER
+  }).then(val => {
+    pool = val;
+    return pool
+  });  
+};
